@@ -33,7 +33,6 @@ main() {
         verify_addressing
         verify_age
         verify_git_repository
-        verify_cloudflare
         verify_success
     else
         # generate sops configuration file
@@ -51,15 +50,9 @@ main() {
         envsubst < "${PROJECT_DIR}/tmpl/kubernetes/cert-manager-secret.sops.yaml" \
             > "${PROJECT_DIR}/kubernetes/apps/cert-manager/cert-manager/issuers/secret.sops.yaml"
         sops --encrypt --in-place "${PROJECT_DIR}/kubernetes/apps/cert-manager/cert-manager/issuers/secret.sops.yaml"
-        envsubst < "${PROJECT_DIR}/tmpl/kubernetes/cloudflare-ddns-secret.sops.yaml" \
-            > "${PROJECT_DIR}/kubernetes/apps/networking/cloudflare-ddns/app/secret.sops.yaml"
-        sops --encrypt --in-place "${PROJECT_DIR}/kubernetes/apps/networking/cloudflare-ddns/app/secret.sops.yaml"
         envsubst < "${PROJECT_DIR}/tmpl/kubernetes/external-dns-secret.sops.yaml" \
             > "${PROJECT_DIR}/kubernetes/apps/networking/external-dns/app/secret.sops.yaml"
         sops --encrypt --in-place "${PROJECT_DIR}/kubernetes/apps/networking/external-dns/app/secret.sops.yaml"
-        envsubst < "${PROJECT_DIR}/tmpl/terraform/secret.sops.yaml" \
-            > "${PROJECT_DIR}/terraform/cloudflare/secret.sops.yaml"
-        sops --encrypt --in-place "${PROJECT_DIR}/terraform/cloudflare/secret.sops.yaml"
         # generate ansible settings
         envsubst < "${PROJECT_DIR}/tmpl/ansible/kube-vip.yml" \
             > "${PROJECT_DIR}/ansible/inventory/group_vars/kubernetes/kube-vip.yml"
@@ -284,27 +277,6 @@ verify_master_count() {
       exit 1
     fi
     _log "INFO(${FUNCNAME[0]})" "Verified control plane node count"
-}
-
-verify_cloudflare() {
-    local account_zone=
-    local errors=
-    _has_envar "BOOTSTRAP_CLOUDFLARE_APIKEY" "true"
-    _has_envar "BOOTSTRAP_CLOUDFLARE_DOMAIN" "true"
-    _has_envar "BOOTSTRAP_CLOUDFLARE_EMAIL" "true"
-    # Try to retrieve zone information from Cloudflare's API
-    account_zone=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=${BOOTSTRAP_CLOUDFLARE_DOMAIN}&status=active" \
-        -H "X-Auth-Email: ${BOOTSTRAP_CLOUDFLARE_EMAIL}" \
-        -H "X-Auth-Key: ${BOOTSTRAP_CLOUDFLARE_APIKEY}" \
-        -H "Content-Type: application/json"
-    )
-    if [[ "$(echo "${account_zone}" | jq ".success")" == "true" ]]; then
-        _log "INFO(${FUNCNAME[0]})" "Verified Cloudflare Account and Zone information"
-    else
-        errors=$(echo "${account_zone}" | jq -c ".errors")
-        _log "ERROR(${FUNCNAME[0]})" "Unable to get Cloudflare Account and Zone information ${errors}"
-        exit 1
-    fi
 }
 
 verify_ansible_hosts() {
