@@ -33,7 +33,7 @@ k3s_server:
   service-cidr: "10.43.0.0/16"
   kubelet-arg:
     # Don't pull /etc/resolv.conf from host
-    - "resolv-conf="
+    - "resolv-conf=/run/systemd/resolve/resolv.conf"
   kube-controller-manager-arg:
     # Required to monitor kube-controller-manager with kube-prometheus-stack
     - "bind-address=0.0.0.0"
