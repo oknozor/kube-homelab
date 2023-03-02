@@ -8,7 +8,6 @@ spec:
   releaseName: traefik
   chart:
     spec:
-      # renovate: registryUrl=https://traefik.github.io/charts
       version: 21.1.0
       chart: traefik
       sourceRef:
