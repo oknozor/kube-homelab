@@ -5,7 +5,7 @@ metadata:
   name: cluster-apps-traefik
   namespace: traefik
 spec:
-  path: ./kubernetes/apps/networking/traefik/app
+  path: ./kubernetes/apps/traefik/traefik/app
   prune: true
   sourceRef:
     kind: GitRepository
