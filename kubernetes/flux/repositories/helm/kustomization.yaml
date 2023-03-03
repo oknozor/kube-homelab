@@ -5,6 +5,7 @@ resources:
   - ./bitnami.yaml
   - ./bjw-s.yaml
   - ./external-dns.yaml
+  - ./cert-manager-webhook-ovh.yaml
   - ./hajimari.yaml
   - ./traefik.yaml
   - ./jetstack.yaml
