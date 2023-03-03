@@ -8,7 +8,7 @@ spec:
   secretName: tls-gill
   issuerRef:
     kind: ClusterIssuer
-    name: letsencrypt-staging
+    name: letsencrypt-production
   commonName: "*.gill.pub"
   dnsNames:
     - "*.gill.pub"
