@@ -43,12 +43,12 @@ spec:
     ingress:
       main:
         enabled: true
+        ingressClassName: traefik
         annotations:
-          nginx.ingress.kubernetes.io/whitelist-source-range: |
-            10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
-          hajimari.io/enable: "false"
+          hajimari.io/enable: "true"
+          hajimari.io/icon: weather-sunset
         hosts:
-          - host: &host "hajimari.${SECRET_DOMAIN}"
+          - host: &host "apps.${SECRET_DOMAIN}"
             paths:
               - path: /
                 pathType: Prefix
