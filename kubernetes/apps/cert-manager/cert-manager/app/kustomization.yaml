@@ -5,6 +5,7 @@ namespace: cert-manager
 resources:
   - ./helmrelease.yaml
   - ./prometheusrule.yaml
+  - ./certificate.yaml
 configMapGenerator:
   - name: cert-manager-dashboard
     files:
