@@ -38,7 +38,7 @@ spec:
         create: true
         kind: ClusterIssuer
         acmeServerUrl: https://acme-staging-v02.api.letsencrypt.org/directory
-        email: "${SECRET_CLUSTER_DOMAIN_EMAIL}"
+        email: "${EMAIL}"
         ovhEndpointName: ovh-eu
         ovhAuthenticationRef:
           applicationKeyRef:
