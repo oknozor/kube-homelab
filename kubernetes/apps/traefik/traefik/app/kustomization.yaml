@@ -5,4 +5,4 @@ namespace: traefik
 resources:
   - ./helmrelease.yaml
   - ./certificate.yaml
-
+  - ./redirect-to-https.yaml
