@@ -25,6 +25,11 @@ spec:
         allowExternalNameServices: true
         allowCrossNamespace: true
 
+    tlsStore:
+      default:
+        defaultCertificate:
+          secretName: tls-gill
+
     deployment:
       replicas: 1
 
