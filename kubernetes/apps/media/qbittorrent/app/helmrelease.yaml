@@ -1,0 +1,118 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: qbittorrent
+  namespace: downloads
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.3.2
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s-charts
+        namespace: flux-system
+
+  values:
+    controller:
+      annotations:
+        reloader.stakater.com/auto: "true"
+
+    image:
+      repository: ghcr.io/onedr0p/qbittorrent
+      tag: 4.5.2@sha256:a4a66d66ed11c5e3570078daf4e4adeb8a7f88b000a64aa760d46ef12fa7a4c6
+
+    podAnnotations:
+      setGateway: "true"
+
+    podSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+      fsGroupChangePolicy: "OnRootMismatch"
+      supplementalGroups:
+        - 65539
+
+    initContainers:
+      copy-config:
+        image: busybox:latest@sha256:c118f538365369207c12e5794c3cbfb7b042d950af590ae6c287ede74f29b7d4
+        command:
+          - "/bin/sh"
+          - -c
+        args:
+          - cp /data/configfiles/* /data/config/
+        volumeMounts:
+          - name: config
+            mountPath: /data/config
+          - name: configfiles
+            mountPath: /data/configfiles
+
+    env:
+      UMASK: "022"
+      QBITTORRENT__PORT: &port 8080
+      QBITTORRENT__USE_PROFILE: "true"
+
+    hostname: qbittorrent
+
+    service:
+      main:
+        ports:
+          http:
+            port: *port
+
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: "traefik"
+        annotations:
+          nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+          nginx.ingress.kubernetes.io/configuration-snippet: |
+            proxy_hide_header "x-webkit-csp";
+            proxy_hide_header "content-security-policy";
+            proxy_hide_header "X-Frame-Options";
+            proxy_set_header Accept-Encoding "";
+            sub_filter '</head>' '<link rel="stylesheet" type="text/css" href="https://theme-park.bjw-s.dev/css/base/qbittorrent/nord.css"></head>';
+            sub_filter_once on;
+        hosts:
+          - host: &host "qbittorrent.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+
+    persistence:
+      config:
+        enabled: true
+        type: emptyDir
+        mountPath: /config/qBittorrent/config
+
+      cache:
+        enabled: true
+        type: emptyDir
+        mountPath: /config/qBittorrent/cache
+
+      configfiles:
+        enabled: true
+        type: configMap
+        name: qbittorrent-configmap
+        mountPath: "-"
+
+      data:
+        enabled: true
+        existingClaim: qbittorrent-config
+        mountPath: /config/qBittorrent/data
+
+      media:
+        enabled: true
+        type: nfs
+        server: "${STORAGE_ADDR}"
+        path: /data/brick1/gv0/media
+        mountPath: /data/nas-media
+
+    resources:
+      requests:
+        cpu: 49m
+        memory: 765M
+      limits:
+        memory: 1426M
