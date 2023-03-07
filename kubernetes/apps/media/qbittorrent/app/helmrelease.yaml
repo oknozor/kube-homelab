@@ -13,7 +13,7 @@ spec:
       interval: 30m
       sourceRef:
         kind: HelmRepository
-        name: bjw-s-charts
+        name: bjw-s
         namespace: flux-system
 
   values:
@@ -30,7 +30,7 @@ spec:
 
     podSecurityContext:
       runAsUser: 1000
-      runAsGroup: 1000
+      runAsGroup: 1003
       fsGroup: 1000
       fsGroupChangePolicy: "OnRootMismatch"
       supplementalGroups:
@@ -43,12 +43,10 @@ spec:
           - "/bin/sh"
           - -c
         args:
-          - cp /data/configfiles/* /data/config/
+          - cp /data/configfiles/* /data/app-configs/qbittorrent/
         volumeMounts:
           - name: config
-            mountPath: /data/config
-          - name: configfiles
-            mountPath: /data/configfiles
+            mountPath: /data/app-configs/qbittorrent/
 
     env:
       UMASK: "022"
@@ -85,12 +83,12 @@ spec:
       config:
         enabled: true
         type: emptyDir
-        mountPath: /config/qBittorrent/config
+        mountPath: /data/app-configs/qbittorrent/config
 
       cache:
         enabled: true
         type: emptyDir
-        mountPath: /config/qBittorrent/cache
+        mountPath: /data/app-configs/qbittorrent/cache
 
       configfiles:
         enabled: true
@@ -101,14 +99,13 @@ spec:
       data:
         enabled: true
         existingClaim: qbittorrent-config
-        mountPath: /config/qBittorrent/data
+        mountPath: /data/app-configs/qbittorrent/data
 
       media:
         enabled: true
-        type: nfs
-        server: "${STORAGE_ADDR}"
-        path: /data/brick1/gv0/media
-        mountPath: /data/nas-media
+        type: hostPath
+        hostPath: /data/storage/media
+        mountPath: /data/media
 
     resources:
       requests:

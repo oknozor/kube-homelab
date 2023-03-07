@@ -6,7 +6,7 @@
       "download_path": "",
       "operating_mode": "AutoManaged",
       "ratio_limit": -2,
-      "save_path": "/data/nas-media/Downloads/Complete/Movies",
+      "save_path": "/data/media/Downloads/Complete/Movies",
       "seeding_time_limit": -2,
       "skip_checking": false,
       "tags": [
@@ -23,7 +23,7 @@
       "download_path": "",
       "operating_mode": "AutoManaged",
       "ratio_limit": -2,
-      "save_path": "/data/nas-media/Downloads/Complete/Music",
+      "save_path": "/data/media/Downloads/Complete/Music",
       "seeding_time_limit": -2,
       "skip_checking": false,
       "tags": [
@@ -40,7 +40,7 @@
       "download_path": "",
       "operating_mode": "AutoManaged",
       "ratio_limit": -2,
-      "save_path": "/data/nas-media/Downloads/Complete/Series",
+      "save_path": "/data/media/Downloads/Complete/Series",
       "seeding_time_limit": -2,
       "skip_checking": false,
       "tags": [
@@ -57,7 +57,7 @@
       "download_path": "",
       "operating_mode": "AutoManaged",
       "ratio_limit": -2,
-      "save_path": "/data/nas-media/Downloads/Complete/Special",
+      "save_path": "/data/media/Downloads/Complete/Special",
       "seeding_time_limit": -2,
       "skip_checking": false,
       "tags": [
