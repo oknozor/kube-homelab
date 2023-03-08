@@ -15,3 +15,4 @@ resources:
   - ./stakater.yaml
   - ./weave-gitops.yaml
   - ./bjw-s.yaml
+  - ./vpn-gateway.yaml
