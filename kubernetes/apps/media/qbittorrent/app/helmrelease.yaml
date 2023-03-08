@@ -30,8 +30,8 @@ spec:
 
     podSecurityContext:
       runAsUser: 1000
-      runAsGroup: 1003
-      fsGroup: 1000
+      runAsGroup: 100
+      fsGroup: 100
       fsGroupChangePolicy: "OnRootMismatch"
       supplementalGroups:
         - 65539
@@ -43,10 +43,12 @@ spec:
           - "/bin/sh"
           - -c
         args:
-          - cp /data/configfiles/* /data/app-configs/qbittorrent/
+          - cp /data/configfiles/* /data/config/
         volumeMounts:
           - name: config
-            mountPath: /data/app-configs/qbittorrent/
+            mountPath: /data/config
+          - name: configfiles
+            mountPath: /data/configfiles
 
     env:
       UMASK: "022"
@@ -83,24 +85,24 @@ spec:
       config:
         enabled: true
         type: emptyDir
-        mountPath: /data/app-configs/qbittorrent/config
+        mountPath: /config/qBittorrent/config
 
       cache:
         enabled: true
         type: emptyDir
-        mountPath: /data/app-configs/qbittorrent/cache
+        mountPath: /config/qBittorrent/cache
 
       configfiles:
         enabled: true
         type: configMap
         name: qbittorrent-configmap
-        mountPath: "-"
+        mountPath: /data/configfiles
 
       data:
         enabled: true
         type: hostPath
-        hostPath: /data/storage/config/qbittorrent
-        mountPath: /data/app-configs/qbittorrent/data
+        hostPath: /data/storage/app-configs/qbittorrent/data
+        mountPath: /config/qBittorrent/data
 
       media:
         enabled: true
