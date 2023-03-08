@@ -98,7 +98,8 @@ spec:
 
       data:
         enabled: true
-        existingClaim: qbittorrent-config
+        type: hostPath
+        hostPath: /data/storage/config/qbittorrent
         mountPath: /data/app-configs/qbittorrent/data
 
       media:
