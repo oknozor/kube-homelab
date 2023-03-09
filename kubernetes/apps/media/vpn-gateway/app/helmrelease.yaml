@@ -40,8 +40,6 @@ spec:
         env:
           - name: VPN_SERVICE_PROVIDER
             value: protonvpn
-          - name: VPN_TYPE
-            value: wireguard
           - name: VPN_INTERFACE
             value: wg0
           - name: FIREWALL
