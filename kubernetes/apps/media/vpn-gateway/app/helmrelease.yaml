@@ -51,7 +51,7 @@ spec:
           - name: OPENVPN_PASSWORD
             value: ${openVpnPassword}
           - name: SERVER_COUNTRIES
-            value: Switzerland
+            value: Germany
           - name: DOT
             value: "off"
 
@@ -82,7 +82,7 @@ spec:
                   protocol: UDP
             - to:
                 - ipBlock:
-                    cidr: 10.42.0.0/16
+                    cidr: 10.0.0.0/8
 
     settings:
       # -- If using a VPN, interface name created by it
@@ -92,7 +92,7 @@ spec:
       # -- If VPN_BLOCK_OTHER_TRAFFIC is true, allow VPN traffic over this port
       VPN_TRAFFIC_PORT: *vpn_port
       # -- Traffic to these IPs will be send through the K8S gateway
-      VPN_LOCAL_CIDRS: "10.42.0.0/16 192.168.0.0/16"
+      VPN_LOCAL_CIDRS: "10.0.0.0/8 192.168.0.0/16"
 
     # -- settings to expose ports, usually through a VPN provider.
     # NOTE: if you change it you will need to manually restart the gateway POD
