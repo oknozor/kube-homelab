@@ -5,6 +5,7 @@ metadata:
   name: cluster-apps-vpn
   namespace: flux-system
 spec:
+  interval: 10m
   path: ./kubernetes/apps/media/vpn/app
   prune: true
   sourceRef:
