@@ -287,7 +287,7 @@ The cluster application [external-dns](https://github.com/kubernetes-sigs/extern
 1. Verify Flux can be installed
 
     ```sh
-    task cluster:verify
+    `task cluster:verify`
     # ► checking prerequisites
     # ✔ kubectl 1.21.5 >=1.18.0-0
     # ✔ Kubernetes 1.21.5+k3s1 >=1.16.0-0
