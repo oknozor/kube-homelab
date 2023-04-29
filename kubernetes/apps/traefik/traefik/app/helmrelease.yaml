@@ -1,0 +1,72 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: traefik
+spec:
+  interval: 15m
+  releaseName: traefik
+  chart:
+    spec:
+      version: 21.1.0
+      chart: traefik
+      sourceRef:
+        kind: HelmRepository
+        name: traefik
+        namespace: flux-system
+
+  install:
+    remediation:
+      retries: 3
+
+  values:
+    providers:
+      kubernetesCRD:
+        allowExternalNameServices: true
+        allowCrossNamespace: true
+
+    tlsStore:
+      default:
+        defaultCertificate:
+          secretName: tls-gill
+
+    deployment:
+      replicas: 1
+
+    ingressRoute:
+      dashboard:
+        enabled: true
+        matchRule: Host(`traefik.gill.pub`)
+        entryPoints: ["websecure"]
+
+    experimental:
+      http3:
+        enabled: true
+
+    logs:
+      general:
+        level: ERROR
+      access:
+        enabled: false
+        filters:
+          statuscodes: 200,300-302
+          retryattempts: true
+          minduration: 450000ns
+        fields:
+          general:
+            names:
+              defaultmode: drop
+              ClientAddr: keep
+              RequestAddr: keep
+              RequestMethod: keep
+              RequestPath: keep
+              RequestCount: keep
+              RequestProtocol: keep
+              RequestScheme: keep
+              RetryAttempts: keep
+              RouterName: keep
+              Duration: keep
+          headers:
+            defaultmode: keep
+            names:
+              Authorization: drop

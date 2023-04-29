@@ -1,0 +1,18 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: gill-certificate
+  namespace: traefik
+spec:
+  secretName: tls-gill
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-production
+  commonName: "*.gill.pub"
+  dnsNames:
+    - "*.gill.pub"
+  secretTemplate:
+    annotations:
+      reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: ""
